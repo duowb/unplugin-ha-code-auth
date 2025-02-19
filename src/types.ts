@@ -1,6 +1,6 @@
 import { join, resolve } from 'node:path'
 import { cwd } from 'node:process'
-import type { FilterPattern } from '@rollup/pluginutils'
+import type { Pattern } from 'fast-glob'
 
 export interface AliasConfig {
   /**
@@ -16,8 +16,8 @@ export interface AliasConfig {
 }
 
 export interface Options {
-  include?: FilterPattern
-  exclude?: FilterPattern
+  include?: Pattern[]
+  exclude?: Pattern[]
   enforce?: 'pre' | 'post' | undefined
   /**
    * 代码文件路径
@@ -44,8 +44,8 @@ export type OptionsResolved = Overwrite<
 
 export function resolveOptions(options: Options): OptionsResolved {
   return {
-    include: options.include || [/\.[cm]?[jt]sx?$|\.vue$/],
-    exclude: options.exclude || [/node_modules/],
+    include: options.include || ['src/**/*.{js,jsx,ts,tsx,cjs,mjs}', 'src/**/*.vue'],
+    exclude: options.exclude || ['**/*.d.ts'],
     enforce: 'enforce' in options ? options.enforce : 'pre',
     codeFilePath:
       options.codeFilePath || join(cwd(), 'projectCodePermissions.json'),
@@ -77,23 +77,13 @@ export interface CodeItem {
 
 export type PartialCodeItem = Partial<CodeItem>
 
-export interface ProjectPageCodeAuths {
-  [pagePath: string]: CodeItem[]
-}
-
-export interface DependencyGraph {
-  [pagePath: string]: string[]
-}
-export interface ProjectPageRoute {
-  [pagePath: string]: RouteItem
-}
-
-export interface ProjectPageRouteAndCodeAuths {
-  [pagePath: string]: {
-    routeItem: RouteItem
-    codeItems: CodeItem[]
-  }
-}
+export type ProjectPageCodeAuthsMap = Map<string, CodeItem[]>
+export type ProjectPageRouteMap = Map<string, RouteItem>
+export type DependencyGraphMap = Map<string, string[]>
+export type ProjectPageRouteAndCodeAuthsMap = Map<string, {
+  routeItem: RouteItem
+  codeItems: CodeItem[]
+}>
 
 // 扩展 Module 类型
 declare module 'webpack' {

@@ -61,6 +61,19 @@ function createI18nValueRegex(variableName: string): RegExp {
 function extractI18nKey(text: string): string {
   return text.split('\'')[1] || text.split('"')[1]
 }
+
+function parseI18nValue(value: string, i18nValDef: string): string {
+  const i18nMap = i18nValDef.split(',').reduce((acc, pair) => {
+    const [key, value] = pair.trim().split(':').map(s => s.trim())
+    if (key && value) {
+      acc[key] = value
+    }
+    return acc
+  }, {} as Record<string, string>)
+
+  return extractI18nKey(i18nMap[value])
+}
+
 /**
  * 获取成员表达式的标签
  * @param value 成员表达式
@@ -83,28 +96,20 @@ function getMemberExpressionLabel(
   sourceCode: string,
 ): string {
   const result = sourceCode.slice(value.start || 0, value.end || 0)
-
   if (!result.includes('i18n'))
     return result
 
   const [first, ...rest] = result.split('.')
-  const end = rest.at(-1) || ''
-  const i18nValDefRegex = createI18nValueRegex(first)
-  const i18nValDef = sourceCode.match(i18nValDefRegex)?.[1]
+  const end = rest.at(-1)
+  if (!end)
+    return result
 
+  const i18nValDef = sourceCode.match(createI18nValueRegex(first))?.[1]
   if (!i18nValDef)
     return result
 
-  // 解析所有的键值对
-  const i18nMap: Record<string, string> = {}
-  i18nValDef.split(',').forEach((pair) => {
-    const [key, value] = pair.trim().split(':').map(s => s.trim())
-    if (key && value) {
-      i18nMap[key] = value
-    }
-  })
-  const endValue = extractI18nKey(i18nMap[end])
-  return i18n.resolve(endValue)
+  const i18nKey = parseI18nValue(end, i18nValDef)
+  return i18n.resolve(i18nKey)
 }
 
 function getTSAsExpressionLabel(

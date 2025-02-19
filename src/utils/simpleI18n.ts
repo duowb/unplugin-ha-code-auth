@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { cwd } from 'node:process'
 import type { I18nValue } from '../types'
@@ -46,15 +46,15 @@ export class SimpleI18n {
   }
 }
 function getI18nData(): Record<string, I18nValue> {
-  try {
-    const filePath = resolve(cwd(), 'src', 'i18n', 'locale', 'zh-CN.json')
-    const i18nData = readFileSync(filePath, 'utf-8')
-    return JSON.parse(i18nData)
-  }
-  catch (error: any) {
-    console.warn('无法读取 i18n 文件，将使用空对象作为默认值', error)
+  const filePath = resolve(cwd(), 'src', 'i18n', 'locale', 'zh-CN.json')
+
+  if (!existsSync(filePath)) {
+    console.warn('无法找到 i18n 文件，将使用空对象作为默认值')
     return {}
   }
+
+  const i18nData = readFileSync(filePath, 'utf-8')
+  return JSON.parse(i18nData)
 }
 
 // 修改导出方式，允许传入自定义 messages

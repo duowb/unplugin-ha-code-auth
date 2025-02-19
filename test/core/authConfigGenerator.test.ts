@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { generateProjectCodeAuths } from '../../src/core/files'
+import { generateProjectCodeAuths } from '../../src/core/authConfigGenerator'
 
 const mockData = {
   projectPageCodeAuths: {
@@ -76,11 +76,18 @@ const mockData = {
 
 describe('generateProjectCodeAuths', () => {
   it('应该生成正确的权限映射', () => {
-    const projectAuths = mockData.projectPageCodeAuths
-
-    const projectDependencyGraph = mockData.projectDependencyGraph
-
-    const projectRouteItems = mockData.projectRouteItems
+    const projectAuths = new Map()
+    const projectDependencyGraph = new Map()
+    const projectRouteItems = new Map()
+    Object.entries(mockData.projectPageCodeAuths).forEach(([key, value]) => {
+      projectAuths.set(key, value)
+    })
+    Object.entries(mockData.projectDependencyGraph).forEach(([key, value]) => {
+      projectDependencyGraph.set(key, value)
+    })
+    Object.entries(mockData.projectRouteItems).forEach(([key, value]) => {
+      projectRouteItems.set(key, value)
+    })
 
     const result = generateProjectCodeAuths(
       projectAuths,
@@ -88,47 +95,47 @@ describe('generateProjectCodeAuths', () => {
       projectRouteItems,
     )
 
-    expect(result).toMatchInlineSnapshot(`
-      {
-        "src/views/role/index.vue": {
-          "codeItems": [
-            {
-              "code": "role-add",
-              "label": "i18n.t("role.add")",
-            },
-            {
-              "code": "role-edit",
-              "label": "i18n.t("role.edit")",
-            },
-          ],
-          "routeItem": {
-            "label": "角色管理",
-            "name": "role",
-            "path": "/role",
-          },
-        },
+    expect(JSON.stringify(Object.fromEntries(result), null, 2)).toMatchInlineSnapshot(`
+      "{
         "src/views/user/index.vue": {
+          "routeItem": {
+            "name": "user",
+            "path": "/user",
+            "label": "用户管理"
+          },
           "codeItems": [
             {
               "code": "user-add",
-              "label": "i18n.t("user.add")",
+              "label": "i18n.t(\\"user.add\\")"
             },
             {
               "code": "user-edit",
-              "label": "i18n.t("user.edit")",
+              "label": "i18n.t(\\"user.edit\\")"
             },
             {
               "code": "user-delete",
-              "label": "i18n.t("user.delete")",
-            },
-          ],
-          "routeItem": {
-            "label": "用户管理",
-            "name": "user",
-            "path": "/user",
-          },
+              "label": "i18n.t(\\"user.delete\\")"
+            }
+          ]
         },
-      }
+        "src/views/role/index.vue": {
+          "routeItem": {
+            "name": "role",
+            "path": "/role",
+            "label": "角色管理"
+          },
+          "codeItems": [
+            {
+              "code": "role-add",
+              "label": "i18n.t(\\"role.add\\")"
+            },
+            {
+              "code": "role-edit",
+              "label": "i18n.t(\\"role.edit\\")"
+            }
+          ]
+        }
+      }"
     `)
   })
 })
