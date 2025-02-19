@@ -1,7 +1,7 @@
 {
   "name": "unplugin-ha-code-auth",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "packageManager": "pnpm@9.9.0",
   "description": "生成页面按钮权限列表",
   "license": "MIT",
