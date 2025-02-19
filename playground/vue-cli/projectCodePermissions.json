@@ -1,0 +1,44 @@
+{
+  "D:\\code\\my\\github\\unplugin-code-auth\\playground\\vue-cli\\src\\home.vue": {
+    "routeItem": {
+      "name": "Home",
+      "path": "/home",
+      "label": "首页"
+    },
+    "codeItems": [
+      {
+        "code": "test",
+        "label": "测试"
+      },
+      {
+        "code": "test2",
+        "label": "测试2"
+      },
+      {
+        "code": "test3",
+        "label": "测试3"
+      }
+    ]
+  },
+  "D:\\code\\my\\github\\unplugin-code-auth\\playground\\vue-cli\\src\\pages\\home.vue": {
+    "routeItem": {
+      "name": "Home",
+      "path": "/home",
+      "label": "首页"
+    },
+    "codeItems": [
+      {
+        "code": "test",
+        "label": "测试"
+      },
+      {
+        "code": "test2",
+        "label": "测试2"
+      },
+      {
+        "code": "test3",
+        "label": "测试3"
+      }
+    ]
+  }
+}

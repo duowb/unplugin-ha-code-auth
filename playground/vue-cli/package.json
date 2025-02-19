@@ -10,7 +10,7 @@
   "dependencies": {
     "@vue/composition-api": "^1.7.2",
     "core-js": "^3.8.3",
-    "vue": "^2.6.14"
+    "vue": "2.6.14"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.4.0",
@@ -23,7 +23,9 @@
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
     "typescript": "~4.5.5",
-    "vue-template-compiler": "^2.6.14"
+    "vue-template-compiler": "2.6.14",
+    "update-browserslist-db": "^1.1.2",
+    "unplugin-ha-code-auth": "workspace:*"
   },
   "volta": {
     "node": "20.18.0"
